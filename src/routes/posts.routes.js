@@ -1,9 +1,12 @@
 import express from "express";
-import { getAllPosts } from "../controllers/posts.controller.js";
+import { getAllPosts, getPostById } from "../controllers/posts.controller.js";
 
 const router = express.Router();
 
-// GET /api/v1/posts
+// GET all posts
 router.get("/", getAllPosts);
+
+// GET single post by ID (dynamic route)
+router.get("/:postId", getPostById);
 
 export default router;
