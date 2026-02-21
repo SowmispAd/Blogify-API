@@ -1,13 +1,25 @@
 import express from "express";
-import postsRouter from "./src/routes/posts.routes.js";
+import cors from "cors";
+import mainRouter from "./src/routes/index.js";
 
 const app = express();
+const PORT = 3000;
 
+// Global Middleware
+app.use(cors());
 app.use(express.json());
 
-// Mount the posts router
-app.use("/api/v1/posts", postsRouter);
+// Versioned API Mount
+app.use("/api/v1", mainRouter);
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+// Central Error Handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error"
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });

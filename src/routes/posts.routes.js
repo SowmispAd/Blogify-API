@@ -1,12 +1,14 @@
 import express from "express";
-import { getAllPosts, getPostById } from "../controllers/posts.controller.js";
+import {
+  getAllPosts,
+  getPostById,
+  createPost
+} from "../controllers/posts.controller.js";
 
 const router = express.Router();
 
-// GET all posts
 router.get("/", getAllPosts);
-
-// GET single post by ID (dynamic route)
-router.get("/:postId", getPostById);
+router.get("/:id", getPostById);
+router.post("/", createPost);
 
 export default router;
