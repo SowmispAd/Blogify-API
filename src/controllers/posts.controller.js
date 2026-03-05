@@ -6,10 +6,16 @@ let posts = [
 
 // GET all posts
 export const getAllPosts = (req, res) => {
+  const {sorBy} = req.query;
+  
+  if (sorBy ==="date"){
+    console.log("Sorting posts by date...")
+  }
   res.status(200).json({
-    success: true,
-    data: posts
-  });
+    success:true,
+    message:"All posts fetched successfully",
+    data:posts
+  })
 };
 
 // GET single post
