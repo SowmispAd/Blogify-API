@@ -1,62 +1,52 @@
-// Temporary in-memory data
-let posts = [
-  { id: "1", title: "First Post" },
-  { id: "2", title: "Second Post" }
-];
+import Post from "../models/post.model.js";
 
 // GET all posts
-export const getAllPosts = (req, res) => {
-  const {sorBy} = req.query;
-  
-  if (sorBy ==="date"){
-    console.log("Sorting posts by date...")
+export const getAllPosts = async (req, res, next) => {
+  try {
+    const posts = await Post.find();
+
+    res.status(200).json({
+      success: true,
+      data: posts
+    });
+
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({
-    success:true,
-    message:"All posts fetched successfully",
-    data:posts
-  })
 };
 
 // GET single post
-export const getPostById = (req, res) => {
-  const { id } = req.params;
+export const getPostById = async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id);
 
-  const post = posts.find(p => p.id === id);
+    if (!post) {
+      const error = new Error("Post not found");
+      error.statusCode = 404;
+      throw error;
+    }
 
-  if (!post) {
-    return res.status(404).json({
-      success: false,
-      message: "Post not found"
+    res.status(200).json({
+      success: true,
+      data: post
     });
-  }
 
-  res.status(200).json({
-    success: true,
-    data: post
-  });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // CREATE post
-export const createPost = (req, res) => {
-  const { title } = req.body;
+export const createPost = async (req, res, next) => {
+  try {
+    const post = await Post.create(req.body);
 
-  if (!title) {
-    return res.status(400).json({
-      success: false,
-      message: "Title is required"
+    res.status(201).json({
+      success: true,
+      data: post
     });
+
+  } catch (error) {
+    next(error);
   }
-
-  const newPost = {
-    id: String(posts.length + 1),
-    title
-  };
-
-  posts.push(newPost);
-
-  res.status(201).json({
-    success: true,
-    data: newPost
-  });
 };
