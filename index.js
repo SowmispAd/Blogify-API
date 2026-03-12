@@ -4,10 +4,11 @@ import mainRouter from "./src/routes/index.js";
 
 const app = express();
 const PORT = 3000;
+app.use(express.json());
 
 // Global Middleware
 app.use(cors());
-app.use(express.json());
+
 
 // Versioned API Mount
 app.use("/api/v1", mainRouter);
